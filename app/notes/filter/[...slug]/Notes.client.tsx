@@ -11,22 +11,19 @@ import Pagination from "@/components/Pagination/Pagination";
 import { useRouter } from "next/navigation";
 
 interface NotesClientProps {
-  initialPage: number;
-  initialSearch: string;
   tag?: string;
 }
 
-const NotesClient = ({ initialPage, initialSearch, tag }: NotesClientProps) => {
-  const [page, setPage] = useState(initialPage);
-  const [search, setSearch] = useState(initialSearch);
+const NotesClient = ({ tag }: NotesClientProps) => {
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
   const router = useRouter();
-  const { data: note } = useQuery({
+  const { data: notesData } = useQuery({
     queryKey: ["notes", page, search, tag],
     queryFn: () => fetchNotes(page, search, tag),
     placeholderData: keepPreviousData,
     refetchOnMount: false,
   });
-  console.log(note);
 
   const handleButtonClick = () => {
     router.push("/notes/action/create");
@@ -35,17 +32,16 @@ const NotesClient = ({ initialPage, initialSearch, tag }: NotesClientProps) => {
   const handleChange = useDebouncedCallback((search: string) => {
     setSearch(search);
     setPage(1);
-    console.log(search);
   }, 300);
 
   return (
     <div className={css.app}>
       <header className={css.toolbar}>
-        <SearchBox search={(search: string) => handleChange(search)} />
-        {note && note?.totalPages > 1 && (
+        <SearchBox onSearch={(search: string) => handleChange(search)} />
+        {notesData && notesData?.totalPages > 1 && (
           <Pagination
             page={page}
-            totalPages={note.totalPages}
+            totalPages={notesData.totalPages}
             setPage={setPage}
           />
         )}
@@ -53,7 +49,9 @@ const NotesClient = ({ initialPage, initialSearch, tag }: NotesClientProps) => {
           Create note +
         </button>
       </header>
-      {note && note.notes.length > 0 && <NoteList notes={note.notes} />}
+      {notesData && notesData.notes.length > 0 && (
+        <NoteList notes={notesData.notes} />
+      )}
     </div>
   );
 };

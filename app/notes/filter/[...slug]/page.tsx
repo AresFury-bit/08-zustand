@@ -22,6 +22,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `${tag}`,
     description: `Filter: ${tag}`,
+    openGraph: {
+      title: `${tag}`,
+      description: `Filter: ${tag}`,
+      url: `https://notehub.com/notes/filter/${tag}`,
+      images: [
+        {
+          url: `https://ac.goit.global/fullstack/react/notehub-og-meta.jpg`,
+          height: 1200,
+          width: 630,
+          alt: "notehub image",
+        },
+      ],
+    },
   };
 }
 
@@ -41,7 +54,7 @@ const Notes = async ({ searchParams, params }: Props) => {
   return (
     <>
       <HydrationBoundary state={dehydrate(queryClient)}>
-        <NotesClient initialPage={page} initialSearch={search} tag={tag} />
+        <NotesClient tag={tag} />
       </HydrationBoundary>
     </>
   );

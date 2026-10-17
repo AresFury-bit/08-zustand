@@ -37,9 +37,9 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children, modal }: RootLayoutProps) {
   return (
-    <html lang="en" className={`${roboto.variable}`}>
+    <html lang="en">
       <TanStackProvider>
-        <body>
+        <body className={`${roboto.variable}`}>
           <Header />
           {children}
           {modal}

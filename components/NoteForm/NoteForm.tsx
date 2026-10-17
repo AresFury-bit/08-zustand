@@ -34,6 +34,7 @@ export const NoteForm = ({ onClose }: NoteFormProps) => {
   const mutation = useMutation({
     mutationFn: (newNote: NoteFormValues) => createNote(newNote),
     onSuccess: () => {
+      router.push("/notes/filter/all");
       clearDraft();
       queryClient.invalidateQueries({ queryKey: ["notes"] });
       if (onClose) onClose();
@@ -49,7 +50,6 @@ export const NoteForm = ({ onClose }: NoteFormProps) => {
       content: content,
       tag: tag,
     });
-    router.push("/notes/filter/all");
   };
 
   const handleCancelbutton = () => {
