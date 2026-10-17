@@ -34,10 +34,10 @@ export const NoteForm = ({ onClose }: NoteFormProps) => {
   const mutation = useMutation({
     mutationFn: (newNote: NoteFormValues) => createNote(newNote),
     onSuccess: () => {
-      router.push("/notes/filter/all");
       clearDraft();
       queryClient.invalidateQueries({ queryKey: ["notes"] });
       if (onClose) onClose();
+      router.push("/notes/filter/all");
     },
   });
   const router = useRouter();
