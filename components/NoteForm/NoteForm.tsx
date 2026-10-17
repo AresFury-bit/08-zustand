@@ -29,7 +29,7 @@ export const NoteForm = ({ onClose }: NoteFormProps) => {
       [e.target.name]: e.target.value,
     });
   };
-
+  const router = useRouter();
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: (newNote: NoteFormValues) => createNote(newNote),
@@ -40,7 +40,7 @@ export const NoteForm = ({ onClose }: NoteFormProps) => {
       router.push("/notes/filter/all");
     },
   });
-  const router = useRouter();
+
   const handleSubmitForm = (formData: FormData) => {
     const title = formData.get("title") as string;
     const content = formData.get("content") as string;
