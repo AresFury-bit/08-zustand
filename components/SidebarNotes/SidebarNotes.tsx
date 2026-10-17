@@ -4,7 +4,9 @@ export default function SidebarNotes() {
   return (
     <>
       <ul className={css.menuList}>
-        {/* список тегів */}
+        <li>
+          <a href={`/notes/action/create`}>Create note</a>
+        </li>
         <li className={css.menuItem}>
           <a href={`/notes/filter/all`} className={css.menuLink}>
             All notes

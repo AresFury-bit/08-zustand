@@ -5,11 +5,10 @@ import { fetchNotes } from "@/lib/api";
 import NoteList from "@/components/NoteList/NoteList";
 import { useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
-import Modal from "@/components/Modal/Modal";
-import { NoteForm } from "@/components/NoteForm/NoteForm";
 import SearchBox from "@/components/SearchBox/SearchBox";
 import css from "./Notes.client.module.css";
 import Pagination from "@/components/Pagination/Pagination";
+import { useRouter } from "next/navigation";
 
 interface NotesClientProps {
   initialPage: number;
@@ -20,8 +19,7 @@ interface NotesClientProps {
 const NotesClient = ({ initialPage, initialSearch, tag }: NotesClientProps) => {
   const [page, setPage] = useState(initialPage);
   const [search, setSearch] = useState(initialSearch);
-  const [isModal, setIsModal] = useState(false);
-  // console.log(initialTag);
+  const router = useRouter();
   const { data: note } = useQuery({
     queryKey: ["notes", page, search, tag],
     queryFn: () => fetchNotes(page, search, tag),
@@ -31,11 +29,7 @@ const NotesClient = ({ initialPage, initialSearch, tag }: NotesClientProps) => {
   console.log(note);
 
   const handleButtonClick = () => {
-    setIsModal(true);
-  };
-
-  const closeModal = () => {
-    setIsModal(false);
+    router.push("/notes/action/create");
   };
 
   const handleChange = useDebouncedCallback((search: string) => {
@@ -58,11 +52,6 @@ const NotesClient = ({ initialPage, initialSearch, tag }: NotesClientProps) => {
         <button onClick={handleButtonClick} className={css.button}>
           Create note +
         </button>
-        {isModal && (
-          <Modal onClose={closeModal}>
-            <NoteForm onClose={() => setIsModal(false)} />
-          </Modal>
-        )}
       </header>
       {note && note.notes.length > 0 && <NoteList notes={note.notes} />}
     </div>

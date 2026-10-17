@@ -5,9 +5,19 @@ import {
   dehydrate,
 } from "@tanstack/react-query";
 import NoteDetailsClient from "./NoteDetails.client";
+import { Metadata } from "next";
 
 interface Props {
   params: Promise<{ id: string }>;
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params;
+  const note = await fetchNoteById(id);
+  return {
+    title: `${note.title}`,
+    description: `${note.content.slice(0, 30)}`,
+  };
 }
 
 export default async function NoteDetails({ params }: Props) {
